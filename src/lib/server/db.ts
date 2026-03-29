@@ -59,8 +59,8 @@ function seedBaseData(db: DatabaseSync) {
     ).run(
       "admin-primary",
       "SkyLedger Admin",
-      process.env.DEFAULT_ADMIN_EMAIL ?? "admin@skyledger.local",
-      hashPassword(process.env.DEFAULT_ADMIN_PASSWORD ?? "Admin#12345"),
+      process.env.DEFAULT_ADMIN_EMAIL ?? "admin@gmail.com",
+      hashPassword(process.env.DEFAULT_ADMIN_PASSWORD ?? "admin123"),
       new Date().toISOString()
     );
   }
@@ -94,11 +94,11 @@ function seedBaseData(db: DatabaseSync) {
     insertAgent.run(
       "agent-skyline",
       "Skyline Travel Partners",
-      "12-3 4567 8",
+      "12345678",
       "IATA-7845123",
       "Tier 1",
       "agents@skyline-travel.local",
-      hashPassword(process.env.DEFAULT_AGENT_PASSWORD ?? "Agent#12345"),
+      hashPassword(process.env.DEFAULT_AGENT_PASSWORD ?? "test123"),
       1750000,
       "ACTIVE",
       0.06
@@ -223,9 +223,9 @@ function seedBaseData(db: DatabaseSync) {
     }
   }
 
-  const defaultAdminEmail = process.env.DEFAULT_ADMIN_EMAIL ?? "admin@skyledger.local";
-  const defaultAdminPassword = process.env.DEFAULT_ADMIN_PASSWORD ?? "Admin#12345";
-  const defaultAgentPassword = process.env.DEFAULT_AGENT_PASSWORD ?? "Agent#12345";
+  const defaultAdminEmail = process.env.DEFAULT_ADMIN_EMAIL ?? "admin@gmail.com";
+  const defaultAdminPassword = process.env.DEFAULT_ADMIN_PASSWORD ?? "admin123";
+  const defaultAgentPassword = process.env.DEFAULT_AGENT_PASSWORD ?? "test123";
 
   const adminUser = db
     .prepare('SELECT email, password_hash FROM "AdminUser" WHERE id = ?')
@@ -248,8 +248,15 @@ function seedBaseData(db: DatabaseSync) {
   }
 
   const seededAgent = db
-    .prepare('SELECT password_hash FROM "TravelAgent" WHERE id = ?')
-    .get("agent-skyline") as { password_hash: string } | undefined;
+    .prepare('SELECT arc_number, password_hash FROM "TravelAgent" WHERE id = ?')
+    .get("agent-skyline") as { arc_number: string; password_hash: string } | undefined;
+
+  if (seededAgent && seededAgent.arc_number !== "12345678") {
+    db.prepare('UPDATE "TravelAgent" SET arc_number = ? WHERE id = ?').run(
+      "12345678",
+      "agent-skyline"
+    );
+  }
 
   if (seededAgent && !verifyPassword(defaultAgentPassword, seededAgent.password_hash)) {
     db.prepare('UPDATE "TravelAgent" SET password_hash = ? WHERE id = ?').run(

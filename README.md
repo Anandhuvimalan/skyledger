@@ -6,56 +6,68 @@ SkyLedger is a Next.js airline finance app for:
 - travel agencies searching flights, creating bookings, paying invoices, and downloading receipts
 - role-specific Gemini copilots using the live app state
 
-## Runtime
+## Project Setup
 
-The app now runs against `dev.db` through a server-side SQLite layer and cookie sessions.
+1. Clone the repository or download the project zip.
+2. Open a terminal in the project folder:
 
-Flight search uses Aviationstack schedule data.
-Copilot uses the Gemini `generateContent` REST API.
+```bash
+cd skyledger
+```
 
-## Environment
+3. Install dependencies:
 
-Copy `.env.example` to `.env.local` and provide valid keys if you are setting the project up on a new machine.
+```bash
+npm install
+```
 
-Expected variables:
+4. Create a file named `.env.local` in the project root.
+
+The project root is the same folder that contains `package.json`, `README.md`, and `dev.db`.
+
+5. Copy this example into `.env.local` and add your API keys:
 
 ```bash
 DATABASE_URL=file:./dev.db
-AVIATIONSTACK_API_KEY=...
-GEMINI_API_KEY=...
+AVIATIONSTACK_API_KEY=your_aviationstack_key
+GEMINI_API_KEY=your_gemini_key
 GEMINI_MODEL=gemini-2.5-flash
-DEFAULT_ADMIN_EMAIL=admin@skyledger.local
-DEFAULT_ADMIN_PASSWORD=Admin#12345
-DEFAULT_AGENT_PASSWORD=Agent#12345
+NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY=your_stripe_publishable_key
+STRIPE_SECRET_KEY=your_stripe_secret_key
+DEFAULT_ADMIN_EMAIL=admin@gmail.com
+DEFAULT_ADMIN_PASSWORD=admin123
+DEFAULT_AGENT_PASSWORD=test123
 ```
 
-## Getting Started
-
-Run the development server:
+6. Start the development server:
 
 ```bash
 npm run dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+7. Open the app in your browser at `http://localhost:3000`.
 
-Default seeded login accounts:
+## Default Login Credentials
 
-- Admin: `admin@skyledger.local` / `Admin#12345`
-- Agent: `12-3 4567 8` / `Agent#12345`
+Use these seeded credentials after starting the app:
 
-Admin-created travel agents now require their own passwords and can sign in directly.
+- Admin: `admin@gmail.com` / `admin123`
+- Agent: `12345678` / `test123`
 
-## Notes
+The agent ARC number can be typed as `12345678`.
 
-- Ticket sale posting now includes commission expense at booking time.
-- Invoices and payment receipts can be downloaded from the UI after posting.
-- Revenue recognition uses the current server date instead of a fixed seed date.
+## Runtime Notes
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+- The app runs against `dev.db` through a server-side SQLite layer and cookie sessions.
+- Flight search uses Aviationstack schedule data.
+- Copilot uses the Gemini `generateContent` REST API.
+- Admin-created travel agents require their own passwords and can sign in directly.
 
-## Deploy on Vercel
+## Useful Commands
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+```bash
+npm run dev
+npm run lint
+npx tsc --noEmit
+npm run build
+```

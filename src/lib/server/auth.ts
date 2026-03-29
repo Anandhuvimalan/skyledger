@@ -16,8 +16,8 @@ function getDefaultAdminConfig() {
   return {
     id: "admin-primary",
     name: "SkyLedger Admin",
-    email: "admin@skyledger.local",
-    passwords: [process.env.DEFAULT_ADMIN_PASSWORD, "Admin#12345"].filter(
+    email: process.env.DEFAULT_ADMIN_EMAIL ?? "admin@gmail.com",
+    passwords: [process.env.DEFAULT_ADMIN_PASSWORD, "admin123"].filter(
       (value): value is string => Boolean(value)
     ),
   };
@@ -27,9 +27,9 @@ function getDefaultAgentConfig() {
   return {
     id: "agent-skyline",
     name: "Skyline Travel Partners",
-    arcNumber: "12-3 4567 8",
+    arcNumber: "12345678",
     email: "agents@skyline-travel.local",
-    passwords: [process.env.DEFAULT_AGENT_PASSWORD, "Agent#12345"].filter(
+    passwords: [process.env.DEFAULT_AGENT_PASSWORD, "test123"].filter(
       (value): value is string => Boolean(value)
     ),
   };
