@@ -1,0 +1,175 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+}
+
+model Airline {
+  id             String    @id @default(uuid())
+  name           String
+  iata_code      String
+  icao_code      String
+  dot_number     String?
+  fiscal_year_end DateTime?
+  bookings       Booking[]
+}
+
+model TravelAgent {
+  id              String    @id @default(uuid())
+  agency_name     String
+  arc_number      String
+  iata_number     String?
+  commission_tier String
+  contact_email   String    @unique
+  password_hash   String?
+  annual_volume   Float?
+  status          String    @default("ACTIVE")
+  bookings        Booking[]
+  invoices        Invoice[]
+  payments        Payment[]
+}
+
+model GlAccount {
+  id                    String    @id @default(uuid())
+  account_number        String    @unique
+  account_name          String
+  account_type          String
+  normal_balance        String
+  parent_account_id     String?
+  parent_account        GlAccount? @relation("AccountHierarchy", fields: [parent_account_id], references: [id])
+  child_accounts        GlAccount[] @relation("AccountHierarchy")
+  is_active             Boolean   @default(true)
+  journal_lines         JournalEntryLine[]
+  revenue_rules_debit   RevenueRule[] @relation("RevenueRuleDebit")
+  revenue_rules_credit  RevenueRule[] @relation("RevenueRuleCredit")
+}
+
+model JournalEntry {
+  id               String    @id @default(uuid())
+  entry_date       DateTime
+  description      String?
+  reference_number String?
+  entry_type       String
+  status           String    @default("DRAFT")
+  created_by       String?
+  posted_at        DateTime?
+  lines            JournalEntryLine[]
+}
+
+model JournalEntryLine {
+  id               String    @id @default(uuid())
+  journal_entry_id String
+  journal_entry    JournalEntry @relation(fields: [journal_entry_id], references: [id])
+  gl_account_id    String
+  gl_account       GlAccount    @relation(fields: [gl_account_id], references: [id])
+  debit_amount     Float        @default(0)
+  credit_amount    Float        @default(0)
+  description      String?
+}
+
+model Booking {
+  id                String    @id @default(uuid())
+  ticket_number     String    @unique
+  pnr               String
+  travel_agent_id   String
+  travel_agent      TravelAgent @relation(fields: [travel_agent_id], references: [id])
+  airline_id        String
+  airline           Airline     @relation(fields: [airline_id], references: [id])
+  passenger_name    String
+  passenger_count   Int       @default(1)
+  seat_type         String    @default("ECONOMY")
+  route_origin      String
+  route_destination String
+  flight_date       DateTime
+  booking_date      DateTime
+  base_fare         Float
+  taxes_fees        Float
+  total_amount      Float
+  commission_rate   Float
+  commission_amount Float
+  revenue_status    String    @default("DEFERRED")
+  payment_status    String    @default("UNPAID")
+  invoice_lines     InvoiceLine[]
+  passengers        BookingPassenger[]
+}
+
+model BookingPassenger {
+  id                 String   @id @default(uuid())
+  booking_id         String
+  booking            Booking  @relation(fields: [booking_id], references: [id])
+  passenger_sequence Int
+  full_name          String
+  passport_id        String
+  seat_type          String   @default("ECONOMY")
+  seat_number        String
+  base_fare          Float    @default(0)
+  taxes_fees         Float    @default(0)
+  total_amount       Float    @default(0)
+  created_at         DateTime @default(now())
+}
+
+model Invoice {
+  id                String    @id @default(uuid())
+  invoice_number    String    @unique
+  travel_agent_id   String
+  travel_agent      TravelAgent @relation(fields: [travel_agent_id], references: [id])
+  issue_date        DateTime
+  due_date          DateTime
+  subtotal          Float
+  commission_offset Float
+  taxes             Float
+  total_due         Float
+  status            String    @default("DRAFT")
+  lines             InvoiceLine[]
+  payments          Payment[]
+}
+
+model InvoiceLine {
+  id                String    @id @default(uuid())
+  invoice_id        String
+  invoice           Invoice   @relation(fields: [invoice_id], references: [id])
+  booking_id        String
+  booking           Booking   @relation(fields: [booking_id], references: [id])
+  description       String?
+  amount            Float
+  commission_amount Float
+  net_amount        Float
+}
+
+model Payment {
+  id                String    @id @default(uuid())
+  invoice_id        String
+  invoice           Invoice   @relation(fields: [invoice_id], references: [id])
+  travel_agent_id   String
+  travel_agent      TravelAgent @relation(fields: [travel_agent_id], references: [id])
+  payment_date      DateTime  @default(now())
+  amount            Float
+  payment_method    String
+  card_last_four    String?
+  stripe_payment_id String?
+  processing_fee    Float     @default(0)
+  status            String    @default("PENDING")
+}
+
+model RevenueRule {
+  id                  String    @id @default(uuid())
+  rule_name           String
+  revenue_type        String
+  recognition_trigger String
+  gl_debit_account_id String
+  gl_debit_account    GlAccount @relation("RevenueRuleDebit", fields: [gl_debit_account_id], references: [id])
+  gl_credit_account_id String
+  gl_credit_account   GlAccount @relation("RevenueRuleCredit", fields: [gl_credit_account_id], references: [id])
+  description         String?
+}
+
+model FinancialPeriod {
+  id          String    @id @default(uuid())
+  period_name String
+  start_date  DateTime
+  end_date    DateTime
+  status      String    @default("OPEN")
+  fiscal_year Int
+}

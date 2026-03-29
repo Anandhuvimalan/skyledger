@@ -1,0 +1,25 @@
+
+> skyledger@0.1.0 build
+> next build
+
+▲ Next.js 16.2.1 (Turbopack)
+- Environments: .env
+
+  Creating an optimized production build ...
+
+> Build error occurred
+Error: Turbopack build failed with 1 errors:
+./src/app/(admin)/dashboard/page.tsx:6:22
+`ssr: false` is not allowed with `next/dynamic` in Server Components. Please move it into a Client Component.
+  [90m4 |[0m ...[32m/dynamic"[0m
+  [90m5 |[0m ...
+[31m[1m>[0m [90m6 |[0m ...mic(() => [36mimport[0m([32m"@/components/revenue-chart"[0m).then(mod => mod.[33mRevenueChart[0m), { ssr: [36mfal..[0m.
+  [90m  |[0m    [31m[1m^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^[0m
+  [90m7 |[0m ...
+  [90m8 |[0m ...[33mdminDashboard[0m() {
+  [90m9 |[0m ...
+
+Ecmascript file had an error
+
+
+    at <unknown> (./src/app/(admin)/dashboard/page.tsx:6:22)

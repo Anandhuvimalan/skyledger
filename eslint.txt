@@ -1,0 +1,27 @@
+
+C:\Users\ABHINAV\OneDrive\Desktop\IMPLEMENTATION PLAN\skyledger\src\app\(admin)\agents\page.tsx
+   4:28  warning  'CardTitle' is defined but never used               @typescript-eslint/no-unused-vars
+  21:10  warning  'searchTerm' is assigned a value but never used     @typescript-eslint/no-unused-vars
+  21:22  warning  'setSearchTerm' is assigned a value but never used  @typescript-eslint/no-unused-vars
+
+C:\Users\ABHINAV\OneDrive\Desktop\IMPLEMENTATION PLAN\skyledger\src\app\(admin)\gl\page.tsx
+  4:28  warning  'CardTitle' is defined but never used  @typescript-eslint/no-unused-vars
+
+C:\Users\ABHINAV\OneDrive\Desktop\IMPLEMENTATION PLAN\skyledger\src\app\(admin)\invoices\page.tsx
+   4:28  warning  'CardTitle' is defined but never used               @typescript-eslint/no-unused-vars
+  21:10  warning  'searchTerm' is assigned a value but never used     @typescript-eslint/no-unused-vars
+  21:22  warning  'setSearchTerm' is assigned a value but never used  @typescript-eslint/no-unused-vars
+
+C:\Users\ABHINAV\OneDrive\Desktop\IMPLEMENTATION PLAN\skyledger\src\app\(admin)\journals\page.tsx
+   4:28  warning  'CardTitle' is defined but never used               @typescript-eslint/no-unused-vars
+   9:39  warning  'TabsContent' is defined but never used             @typescript-eslint/no-unused-vars
+  35:10  warning  'searchTerm' is assigned a value but never used     @typescript-eslint/no-unused-vars
+  35:22  warning  'setSearchTerm' is assigned a value but never used  @typescript-eslint/no-unused-vars
+
+C:\Users\ABHINAV\OneDrive\Desktop\IMPLEMENTATION PLAN\skyledger\src\app\(agent)\agent\bookings\page.tsx
+   4:28  warning  'CardTitle' is defined but never used                            @typescript-eslint/no-unused-vars
+   4:52  warning  'CardDescription' is defined but never used                      @typescript-eslint/no-unused-vars
+  40:72  error    `'` can be escaped with `&apos;`, `&lsquo;`, `&#39;`, `&rsquo;`  react/no-unescaped-entities
+
+✖ 14 problems (1 error, 13 warnings)
+
